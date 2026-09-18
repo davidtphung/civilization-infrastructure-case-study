@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CASE STUDY · Civilization Infrastructure · NLT143</title>
+<meta name="description" content="David T Phung × Hugo Enrique Garcia. Demystify the AI data center as anatomy, beauty, and civic honesty." />
+<style>
+:root {
+  --ground:#0a0a0a; --ink:rgba(255,255,255,.92); --mute:rgba(255,255,255,.4);
+  --hair:rgba(255,255,255,.12); --signal:#C9A875; --measure:42rem;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family: Helvetica, "Helvetica Neue", Arial, system-ui, sans-serif;
+  line-height:1.5; font-size:16px;
+}
+a { color:var(--ink); }
+.hud {
+  position:sticky; top:0; z-index:20;
+  display:flex; gap:1rem; flex-wrap:wrap; align-items:center; justify-content:space-between;
+  padding:.75rem 1.25rem;
+  background:rgba(10,10,10,.72); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--hair);
+}
+.hud nav { display:flex; gap:1rem; flex-wrap:wrap; font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+.hud a { text-decoration:none; color:var(--mute); }
+.hud a:hover, .hud a:focus { color:var(--ink); outline:none; }
+.mark { font-size:12px; letter-spacing:.1em; text-transform:uppercase; }
+main { padding:2rem 1.25rem 4rem; }
+.hero { max-width:var(--measure); margin:2rem auto 3rem; }
+.hero h1 { font-size:clamp(2rem,5vw,3.25rem); line-height:1.05; letter-spacing:-.02em; margin:0 0 1rem; }
+.hero p { color:var(--mute); font-size:1.125rem; }
+.badge { display:inline-block; border:1px solid var(--hair); padding:.25rem .5rem; font-size:11px; letter-spacing:.08em; text-transform:uppercase; border-radius:2px; color:var(--signal); }
+section { max-width:72rem; margin:0 auto 4rem; }
+section h2 { font-size:1.25rem; letter-spacing:.04em; text-transform:uppercase; margin:0 0 1rem; }
+.flow {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:.5rem;
+}
+.flow div {
+  border:1px solid var(--hair); border-radius:4px; padding:1rem .75rem; min-height:5rem;
+  background:rgba(255,255,255,.02);
+}
+.flow strong { display:block; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--signal); margin-bottom:.35rem; }
+.flow span { font-size:.9rem; color:var(--mute); }
+.grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem;
+}
+.card {
+  appearance:none; border:1px solid var(--hair); border-radius:4px; padding:0; overflow:hidden;
+  background:#111; color:inherit; text-align:left; cursor:pointer; display:flex; flex-direction:column;
+  min-height:280px; position:relative;
+}
+.card img {
+  width:100%; height:180px; object-fit:cover; display:block;
+  filter:brightness(.55); transition:filter .3s cubic-bezier(.4,0,.2,1);
+}
+.card:hover img, .card:focus-visible img { filter:brightness(.95); }
+.card:focus-visible { outline:2px solid var(--signal); outline-offset:2px; }
+.chip {
+  position:absolute; top:.6rem; left:.6rem;
+  font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  border:1px solid var(--hair); background:rgba(0,0,0,.55); padding:.2rem .4rem; border-radius:2px;
+}
+.card-title { padding:.85rem 1rem 1.1rem; font-size:1rem; }
+.tabs { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1rem; }
+.tabs button {
+  appearance:none; background:transparent; color:var(--mute); border:1px solid var(--hair);
+  border-radius:999px; padding:.45rem .9rem; font:inherit; font-size:12px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer;
+}
+.tabs button[aria-selected="true"] { color:var(--ink); border-color:var(--signal); }
+.panel { border:1px solid var(--hair); border-radius:4px; padding:1.25rem; color:var(--mute); max-width:var(--measure); }
+.panel[hidden] { display:none; }
+table { width:100%; border-collapse:collapse; font-size:.9rem; }
+th, td { border-bottom:1px solid var(--hair); padding:.65rem .4rem; text-align:left; vertical-align:top; }
+th { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--mute); }
+.status { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--signal); }
+footer {
+  border-top:1px solid var(--hair); padding:1.5rem 1.25rem 3rem; color:var(--mute); font-size:.85rem;
+}
+footer .inner { max-width:72rem; margin:0 auto; display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between; }
+.lightbox {
+  position:fixed; inset:0; z-index:50; background:rgba(0,0,0,.86);
+  display:flex; align-items:center; justify-content:center; padding:1rem;
+}
+.lightbox[hidden] { display:none; }
+.lightbox-card {
+  width:min(960px,100%); max-height:92vh; overflow:auto; background:#0f0f0f;
+  border:1px solid var(--hair); border-radius:4px;
+}
+.lightbox-card img { width:100%; height:auto; display:block; }
+.lightbox-body { padding:1rem 1.25rem 1.5rem; }
+.lightbox-body h3 { margin:0 0 .5rem; }
+.lightbox-body p { margin:0; color:var(--mute); }
+.close {
+  float:right; appearance:none; background:transparent; border:1px solid var(--hair);
+  color:var(--ink); border-radius:2px; padding:.35rem .6rem; cursor:pointer; font:inherit; font-size:12px;
+}
+@media (prefers-reduced-motion:reduce) {
+  html { scroll-behavior:auto; }
+  .card img { transition:none; filter:brightness(.9); }
+}
+</style>
+</head>
+<body>
+<header class="hud">
+  <div class="mark">NLT143 RESEARCH</div>
+  <nav>
+    <a href="#plates">Plates</a>
+    <a href="#program">Program</a>
+    <a href="#pes">PES</a>
+    <a href="#actions">Actions</a>
+  </nav>
+</header>
+<main>
+  <div class="hero">
+    <span class="badge">SCENARIO · Case study</span>
+    <h1>Civilization infrastructure for intelligence</h1>
+    <p>Demystify the AI data center as anatomy + beauty + civic honesty, then slide that programming into the home so automation creates time for sacred friction (ritual, kids, craft), not zero domesticity.</p>
+    <p>David T Phung × Hugo Enrique Garcia</p>
+  </div>
+
+  <section id="plates">
+    <h2>SCENARIO plates</h2>
+    <div class="grid">
+<button class="card" data-id="c0" data-title="House of Future" data-badge="C0" data-caption="Intelligence creates time. Busy work falls away. Sacred friction stays." data-src="plates/c0-house-of-future-slide.png">
+  <img src="plates/c0-house-of-future-slide.png" alt="House of Future SCENARIO plate" loading="lazy" />
+  <span class="chip">SCENARIO · C0</span>
+  <span class="card-title">House of Future</span>
+</button>
+<button class="card" data-id="c1" data-title="Case Study Railway" data-badge="C1" data-caption="Structure is railway as much as frame. Robots detailed into the Case Study House." data-src="plates/c1-case-study-railway.png">
+  <img src="plates/c1-case-study-railway.png" alt="Case Study Railway SCENARIO plate" loading="lazy" />
+  <span class="chip">SCENARIO · C1</span>
+  <span class="card-title">Case Study Railway</span>
+</button>
+<button class="card" data-id="c2" data-title="Pompidou Jugular" data-badge="C2" data-caption="Support on the exterior. Value inside. The jugular stays visible on purpose." data-src="plates/c2-pompidou-jugular.png">
+  <img src="plates/c2-pompidou-jugular.png" alt="Pompidou Jugular SCENARIO plate" loading="lazy" />
+  <span class="chip">SCENARIO · C2</span>
+  <span class="card-title">Pompidou Jugular</span>
+</button>
+<button class="card" data-id="c3" data-title="DC + Apartments" data-badge="C3" data-caption="Compute podium. Living above. Beauty not sacrificed for margin." data-src="plates/c3-dc-apartments.png">
+  <img src="plates/c3-dc-apartments.png" alt="DC + Apartments SCENARIO plate" loading="lazy" />
+  <span class="chip">SCENARIO · C3</span>
+  <span class="card-title">DC + Apartments</span>
+</button>
+<button class="card" data-id="c7" data-title="Home Rack Niche" data-badge="C7" data-caption="Tank void becomes domestic intelligence. Home stays sacred." data-src="plates/c7-home-rack-niche.png">
+  <img src="plates/c7-home-rack-niche.png" alt="Home Rack Niche SCENARIO plate" loading="lazy" />
+  <span class="chip">SCENARIO · C7</span>
+  <span class="card-title">Home Rack Niche</span>
+</button>
+<button class="card" data-id="c8" data-title="Wind Tower Mix" data-badge="C8" data-caption="Form follows airflow. Passive towers mix with liquid precision. Not enough alone." data-src="plates/c8-wind-tower-mix.png">
+  <img src="plates/c8-wind-tower-mix.png" alt="Wind Tower Mix SCENARIO plate" loading="lazy" />
+  <span class="chip">SCENARIO · C8</span>
+  <span class="card-title">Wind Tower Mix</span>
+</button>
+    </div>
+  </section>
+
+  <section id="program">
+    <h2>Programming sequence</h2>
+    <div class="flow">
+      <div><strong>01 DC hall</strong><span>Electrons · Matter · Intelligence</span></div>
+      <div><strong>02 I-beam railway</strong><span>Structure as robot avenue</span></div>
+      <div><strong>03 Busy work</strong><span>Domestic labor driven down</span></div>
+      <div><strong>04 Sacred friction</strong><span>Tea · kids · craft · beauty</span></div>
+    </div>
+  </section>
+
+  <section id="pes">
+    <h2>Political · Economic · Social</h2>
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" aria-controls="p-pol" id="t-pol">Political</button>
+      <button role="tab" aria-selected="false" aria-controls="p-eco" id="t-eco">Economic</button>
+      <button role="tab" aria-selected="false" aria-controls="p-soc" id="t-soc">Social</button>
+    </div>
+    <div class="panel" role="tabpanel" id="p-pol">Pompidou jugular: critical infrastructure on the exterior. Honest vulnerability. If society fears the machine, the shutoff stays visible.</div>
+    <div class="panel" role="tabpanel" id="p-eco" hidden>Public good beyond tax: community return of energy or water capacity, roof-lease intelligence, diamond-hands beauty budget when return duration is held.</div>
+    <div class="panel" role="tabpanel" id="p-soc" hidden>Cross-programming: rec, bath house, apartments over compute podium. Passive systems neighbors can share. Home stays sacred.</div>
+  </section>
+
+  <section id="actions">
+    <h2>Action board</h2>
+    <table>
+      <thead><tr><th>#</th><th>Owner</th><th>Action</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Monument</td><td>Game plan interactive site</td><td class="status">Deployed</td></tr>
+        <tr><td>2</td><td>David</td><td>Upload case study sketches</td><td class="status">Waiting</td></tr>
+        <tr><td>3</td><td>Hugo</td><td>Async clicker review (Mexico)</td><td class="status">Waiting</td></tr>
+        <tr><td>4</td><td>Both</td><td>Pick 2–3 clickers that carry light</td><td class="status">Next</td></tr>
+        <tr><td>5</td><td>Both</td><td>Anatomy pass (Potter + form)</td><td class="status">Next</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+<footer>
+  <div class="inner">
+    <div>NLT143 RESEARCH · Built by David T Phung · with Hugo Enrique Garcia</div>
+    <div>Plates SCENARIO · No invented MW · Never Sere</div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lb" hidden role="dialog" aria-modal="true" aria-labelledby="lb-title">
+  <div class="lightbox-card">
+    <div class="lightbox-body">
+      <button class="close" type="button" id="lb-close">Close</button>
+      <span class="badge" id="lb-badge">SCENARIO</span>
+      <h3 id="lb-title"></h3>
+      <div class="inner">
+    <div>NLT143 RESEARCH · Built by David T Phung · with Hugo Enrique Garcia</div>
+    <div>Plates SCENARIO · No invented MW · Never Sere</div>
+  </div>
+      <p id="lb-caption"></p>
+    </div>
+    <img id="lb-img" alt="" />
+  </div>
+</div>
+<script>
+const lb = document.getElementById('lb');
+const lbTitle = document.getElementById('lb-title');
+const lbCaption = document.getElementById('lb-caption');
+const lbBadge = document.getElementById('lb-badge');
+const lbImg = document.getElementById('lb-img');
+let lastFocus = null;
+function openCard(btn) {
+  lastFocus = btn;
+  lbTitle.textContent = btn.dataset.title;
+  lbCaption.textContent = btn.dataset.caption;
+  lbBadge.textContent = 'SCENARIO · ' + btn.dataset.badge;
+  lbImg.src = btn.dataset.src;
+  lbImg.alt = btn.dataset.title + ' SCENARIO plate';
+  lb.hidden = false;
+  document.getElementById('lb-close').focus();
+}
+function closeLb() {
+  lb.hidden = true;
+  if (lastFocus) lastFocus.focus();
+}
+document.querySelectorAll('.card').forEach(btn => btn.addEventListener('click', () => openCard(btn)));
+document.getElementById('lb-close').addEventListener('click', closeLb);
+lb.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+tabs.forEach(tab => tab.addEventListener('click', () => {
+  tabs.forEach(t => {
+    const on = t === tab;
+    t.setAttribute('aria-selected', on ? 'true' : 'false');
+    document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+  });
+}));
+</script>
+</body>
+</html>
